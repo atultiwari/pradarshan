@@ -20,7 +20,8 @@
 //   "events": [                                     times are in seconds of video
 //     { "at": 1.6, "do": "click", "sel": "#play" },
 //     { "at": 5.0, "do": "drag", "sel": "#gl", "from": [0.3, 0.55], "to": [0.72, 0.52], "dur": 2.4 },   fractions of the element's box
-//     { "at": 9.0, "do": "eval", "js": "someGlobal.go('back')" }
+//     { "at": 9.0, "do": "eval", "js": "someGlobal.go('back')" },
+//     { "at": 12.0, "do": "move", "sel": ".card" }      glide the pointer there without pressing (park it off the buttons)
 //   ],
 //   "done": "state.step === 7 && !state.busy",       JS that is true when the run has finished
 //   "hold": 3, "minSeconds": 5, "maxSeconds": 150    seconds to hold after done; safety limits
