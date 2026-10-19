@@ -65,8 +65,11 @@ near (`byDepth`), each object complete with its own ink before the next.
 
 ## Lessons
 
-- Never declare names the engine owns (short ones like `S`, `C`, `L`, `P`, `f`, `sp`): a clash blanks the page. Prefix
-  your own (`mwS`, `jarL`).
+- Never declare names the engine owns: its public helpers are short (`P`, `pd`, `f`, `sp`, `box`, `tx`, `mix`, `INK`,
+  `INK_K`, `OX`, `OY`, `VIEW`, `RC`). A clash is a SyntaxError that blanks the page. Prefix your own (`mwS`, `jarL`).
+  The internal constants are prefixed already (`ISO_C`, `ISO_S`, `LIGHT`).
+- The paper grain and wobble filter stays inside drawn shapes, so embedded images (illustrated people,
+  `references/illustrated-people.md`) get no pale halo.
 - A row of 17 jars in one line becomes unreadable: fold it into a U on two tiers (front row on the bench, back row on a
   raised shelf), with the carrier crossing at one end.
 - Jar labels are tape on the front face (`heTape` in the example): large type, two lines, a numbered badge; the active

@@ -21,7 +21,7 @@ const INK = '#231e16';
 const SHADOW = '#41538f';
 
 /* ---------- projection (x = depth toward viewer-right, y = toward viewer-left, z = up) ---------- */
-const C = Math.cos(Math.PI/6), S = Math.sin(Math.PI/6);
+const ISO_C = Math.cos(Math.PI/6), ISO_S = Math.sin(Math.PI/6);   // prefixed: pages and tools must be free to use C, S, L
 let OX = 0, OY = 0;
 /* VIEW turns the object in 90° steps about a vertical axis through its centre (RC):
    0 = front (+x) and left (+y) faces toward the viewer, 1 = turned once (the +y side becomes the front)…
@@ -31,9 +31,9 @@ const VIEW_NAMES = ['front', 'left side', 'back', 'right side'];
 const TURNS = [0, 2];                 // the views the UI offers: front and back (figures still draw correctly in all four)
 const rotV = ([x,y,z]) => { switch (VIEW & 3){ case 1: return [y,-x,z]; case 2: return [-x,-y,z]; case 3: return [-y,x,z]; default: return [x,y,z]; } };
 const rotXY = (x,y) => { const r = rotV([x-RC[0], y-RC[1], 0]); return [r[0]+RC[0], r[1]+RC[1]]; };
-const P0 = (x,y,z) => [(x-y)*C + OX, (x+y)*S - z + OY];                       // raw iso, no turn
-const P  = (x,y,z) => { const [a,b] = rotXY(x,y); return [(a-b)*C + OX, (a+b)*S - z + OY]; };
-const Dv = (x,y,z) => { const [a,b,c] = rotV([x,y,z]); return [(a-b)*C, (a+b)*S - c]; };
+const P0 = (x,y,z) => [(x-y)*ISO_C + OX, (x+y)*ISO_S - z + OY];                       // raw iso, no turn
+const P  = (x,y,z) => { const [a,b] = rotXY(x,y); return [(a-b)*ISO_C + OX, (a+b)*ISO_S - z + OY]; };
+const Dv = (x,y,z) => { const [a,b,c] = rotV([x,y,z]); return [(a-b)*ISO_C, (a+b)*ISO_S - c]; };
 // distance toward the viewer in the current view: draw parts with smaller depth first
 const depthOf = p => { const [a,b] = rotXY(p[0],p[1]); return a + b + p[2]; };
 // sort [{at:[x,y,z], svg}] back-to-front for the current view and join
@@ -63,10 +63,10 @@ const SHADOW_K = 0.85, AZ_MIN = 20, AZ_MAX = 160;
 // cast shadows are drawn shorter than the shading light implies (0.45 × height instead of 0.85 ×): long shadows of tall
 // parts on thin supports (a lamp shade, a fan head) land far from the object and read as separate blobs
 const SHADOW_LEN = 0.45;
-let L = [0,0,1], SH = [0,0];
-function setLight(deg){ const a=deg*Math.PI/180; SH=[SHADOW_K*Math.cos(a), SHADOW_K*Math.sin(a)]; L=norm([-SH[0],-SH[1],1]); }
+let LIGHT = [0,0,1], SH = [0,0];
+function setLight(deg){ const a=deg*Math.PI/180; SH=[SHADOW_K*Math.cos(a), SHADOW_K*Math.sin(a)]; LIGHT=norm([-SH[0],-SH[1],1]); }
 const LIN = norm([.6,.2,1]);                       // fixed light for interiors / small props
-const tone  = (n,m) => { const d=dot(rotV(n),L);   return d>-.15 ? m.l : d>-.45 ? m.m : m.d; };   // exterior, follows the sun
+const tone  = (n,m) => { const d=dot(rotV(n),LIGHT);   return d>-.15 ? m.l : d>-.45 ? m.m : m.d; };   // exterior, follows the sun
 const toneI = (n,m) => { const d=dot(rotV(n),LIN); return d>.6 ? m.l : d>.05 ? m.m : m.d; };      // interior / props
 const mix = (a,b,t) => '#' + [1,3,5].map(i => Math.round(parseInt(a.substr(i,2),16)*(1-t) + parseInt(b.substr(i,2),16)*t).toString(16).padStart(2,'0')).join('');
 const matOf = hex => ({ l:hex, m:mix(hex,'#000000',.16), d:mix(hex,'#000000',.42) });
@@ -247,7 +247,8 @@ const filterFor = k => `<filter id="hand" x="-3%" y="-3%" width="106%" height="1
   <feColorMatrix in="n1" type="matrix" values=".3 0 0 0 .84  .3 0 0 0 .84  .3 0 0 0 .84  0 0 0 0 1" result="grain"/>
   <feTurbulence type="fractalNoise" baseFrequency="${(0.012/k).toFixed(4)}" numOctaves="2" seed="7" result="n2"/>
   <feColorMatrix in="n2" type="matrix" values=".3 0 0 0 .85  .3 0 0 0 .85  .3 0 0 0 .85  0 0 0 0 1" result="blot"/>
-  <feBlend in="wob" in2="grain" mode="multiply" result="g1"/><feBlend in="g1" in2="blot" mode="multiply" result="g2"/>
+  <feComposite in="grain" in2="wob" operator="in" result="grainIn"/><feComposite in="blot" in2="wob" operator="in" result="blotIn"/>
+  <feBlend in="wob" in2="grainIn" mode="multiply" result="g1"/><feBlend in="g1" in2="blotIn" mode="multiply" result="g2"/>
   <feComposite in="g2" in2="wob" operator="in"/></filter>`;
 
 /* mountFigure({

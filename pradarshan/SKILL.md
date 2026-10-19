@@ -9,9 +9,9 @@ Turn a process into something people can press, watch and understand: a real-loo
 step, a window into the part doing the work, and numbers that come from the real thing. Then make it work on every screen
 and record it as video.
 
-Everything needed is inside this skill: the drawing engines (`assets/engines/`), a complete worked example
-(`examples/he-staining/`, H&E staining in all three styles), and scripts to scaffold, serve, check and record
-(`scripts/`). Nothing else has to be installed except Node 22+, Chrome, ffmpeg, and python3 with numpy (music) and
+Everything needed is inside this skill: the drawing engines (`assets/engines/`), two worked examples
+(`examples/he-staining/`, H&E staining in all three styles, and `examples/aed-bench/`, an AED procedure with
+illustrated people), and scripts to scaffold, serve, check, place illustrations and record (`scripts/`). Nothing else has to be installed except Node 22+, Chrome, ffmpeg, and python3 with numpy (music) and
 segno (QR code).
 
 ## The three styles
@@ -37,7 +37,10 @@ Ask in one go, with a recommended default for each:
 - the authoritative source (a textbook and edition, a manufacturer's manual, a guideline). If they have a PDF, ask
   for the chapter or pages;
 - the site name and tagline, the footer credit line, and a website for the QR code (optional);
-- whether to publish (GitHub repo and Pages) and record videos (laptop 16:9, phone 9:16).
+- whether to publish (GitHub repo and Pages) and record videos (laptop 16:9, phone 9:16);
+- **if the figure shows people**: where the illustrations come from (see `references/illustrated-people.md`):
+  a paid image tool connected to Claude (state the price per image first), the free manual route (the user pastes
+  prepared prompt packs into ChatGPT or Gemini), or code-drawn (free, but not good enough for people).
 
 ### 2. Spec first: truth before drawing
 
@@ -54,6 +57,19 @@ Write `docs/spec.md` from `references/spec-template.md` **before any geometry**.
 - Wrong-order presses and what the page says ("Wax keeps water-based stains out: dewax first").
 
 Show the spec to the user if the subject is clinical or anything is uncertain.
+
+For clinical figures, **medical accuracy comes first**: regenerate or redraw as often as needed, and show a result
+only after checking it against the source. If a publisher's site blocks scripted downloads, use the official PDF
+mirrors and cite figure and section numbers (e.g. "ERC 2025 BLS, Fig. 7").
+
+### 2b. People: a character sheet before any scene
+
+If the figure shows people (rescuers, patients, a cook at a stove), **code-drawn people are not good enough**: tubes
+and balls, even with faces and clothes, look like mannequins, and users reject them. Machines and benches are fine in
+code; people are illustrations. Read `references/illustrated-people.md` and, before building any page:
+1. agree the cast (who, skin, hair, clothes) and get one cast reference sheet approved;
+2. write a posture-tested skeleton for the poses that teach something (CPR posture, hand position), with tests;
+3. make each pose one at a time from a pose reference, check it against the source, show it, then the next.
 
 ### 3. Scaffold
 
@@ -100,8 +116,9 @@ node <skill>/scripts/check-pages.mjs http://127.0.0.1:8765/<name> sketchbook,tur
 
 It fails on page errors, sideways scroll on phones, and laptop pages taller than the screen, and saves screenshots.
 Then look at the screenshots yourself, plus a full run: read `references/review.md` and go through its checklist,
-including a forward-only trace of the active station from start to finish. Look at every step, not just the first
-frame.
+including a forward-only trace of the active station from start to finish (`scripts/trace-run.mjs`). Look at every
+step, not just the first frame, **zoomed in, at several moments of each station**: device checks and run traces pass
+even when the picture is wrong (pads on the head, a ring in mid-air, a hand on the wrong button).
 
 ### 6. Publish (when asked)
 
@@ -124,11 +141,14 @@ bench round; switch between whole view and follow view), a soft music bed made i
 | `references/spec.md`, `spec-template.md` | How to research and write the spec; the template |
 | `references/ui.md` | Layout, devices, player, labels, footer, switcher: the rules every page follows |
 | `references/sketchbook.md`, `turntable.md`, `working-model.md` | How to build each style from the example |
+| `references/illustrated-people.md` | People: image source (paid, free manual, code), prompt packs, pose references, two-person images, registration, anchors |
 | `references/review.md` | The critic's checklist, built from real review rounds |
 | `references/recording.md` | Videos: demo scripts, pointer, music, encoding, checks |
 | `assets/engines/` | The 2D sketch engine and the isometric engine (with `lathe.mjs` for round parts) |
 | `assets/shared/switcher.js` | The site bar and version switch |
 | `examples/he-staining/` | The full worked example: 17-station H&E staining in all three styles |
-| `scripts/` | `new-project`, `serve`, `check-pages`, `shot`, `record`, `make-video.sh`, `music.py`, `qr.py` |
+| `examples/aed-bench/` | The people example: spec, posture-tested skeleton and tests, the image log, tool page (full project: github.com/atultiwari/aed-bench) |
+| `scripts/` | `new-project`, `serve`, `check-pages`, `shot`, `trace-run`, `record`, `make-video.sh`, `music.py`, `qr.py` |
+| `scripts/people/` | Illustration pipeline: `pose-ref.html`, `prompt_pack.py`, `remove_bg.py`, `register_sprite.py`, `extract_layer.py`, `make_push_frame.py`, `defringe.py`, `sprite_grid.py`, `compose_preview.py` |
 
 Inspired by interactive figures shared on X by @Aprilzz423, @elvar_official and @wheresryan22.

@@ -41,3 +41,20 @@ looking at screenshots of a full run. Every item below was a real review comment
 - [ ] Nothing floats: every part sits on or joins something.
 - [ ] Shadows are short and attached; no dark outline strips along edges.
 - [ ] Look at every step, not just the first frame. A beautiful opening and a broken middle is the most common failure.
+
+## People and illustrations
+
+- [ ] Every overlay (station ring, speech bubble, pads, cables, shock flash, timer) is anchored to points measured on
+      the picture itself (`scripts/people/sprite_grid.py`), not to an older code model. Pads on a head and a ring in
+      mid-air both came from this.
+- [ ] No enclosed background inside a sprite (the white wedge between a rescuer's arms) and no light halos at its
+      edges.
+- [ ] Every action is the right one for its station: the right button pressed (not SHOCK at "switch on"), nobody
+      touching the patient while the device analyses or shocks.
+- [ ] Every device state fits the moment: a screen dark before switch-on, a shock button lit only when a shock is
+      advised.
+- [ ] Each teaching pose matches the source wording (hand position, arm angle, head tilt) when zoomed in.
+- [ ] The same person looks the same in every sprite (face, hair, clothes, shoes).
+- [ ] On phones the close-up follows the same focus point as the ring, and the ring keeps a readable minimum size.
+- [ ] Device checks and run traces pass even when the picture is wrong: review every station at several moments,
+      zoomed in.

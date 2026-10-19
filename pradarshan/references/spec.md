@@ -49,6 +49,12 @@ everywhere ("47 min 10 s" on all three pages).
 - A reason for each wrong-order press.
 - One big idea.
 
+## 5b. People
+
+If people appear, list the cast in the spec (who each person is, and their role in each step) and every pose that
+teaches something, with its source wording ("arms straight, shoulders over the hands", ERC 2025 Fig. 7). Those
+become the skeleton's tests and the checks for each illustration (`references/illustrated-people.md`).
+
 ## 6. Check it with the user
 
 For clinical subjects, show the station list, the order and the numbers before building. It is far cheaper to fix a
