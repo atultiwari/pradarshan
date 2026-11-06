@@ -1,8 +1,6 @@
-# Claude skills
+# pradarshan
 
-Skills for [Claude Code](https://claude.com/claude-code) by Dr. Atul Tiwari.
-
-## pradarshan
+A skill for [Claude Code](https://claude.com/claude-code) by Dr. Atul Tiwari.
 
 *प्रदर्शन, "demonstration".* Builds an interactive, step-by-step figure of how something works (a lab procedure, a
 medical device, a clinical process, or any machine, from a microwave to a vending machine) as a website in up to three
@@ -16,10 +14,10 @@ Every page works on laptops and phones, publishes to GitHub Pages, and records a
 music bed for YouTube (16:9) and Shorts/Reels (9:16). It is self-contained: engines, a full worked example (H&E
 staining in all three styles, see [Stain Bench](https://atultiwari.github.io/stain-bench/)) and scripts are included.
 
-### Install
+## Install
 
 ```bash
-git clone <this repo> ~/Projects/claude-skills
+git clone https://github.com/atultiwari/pradarshan.git ~/Projects/claude-skills/pradarshan
 ln -s ~/Projects/claude-skills/pradarshan ~/.claude/skills/pradarshan
 ```
 
